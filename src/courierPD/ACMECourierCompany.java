@@ -111,6 +111,7 @@ public class ACMECourierCompany implements Serializable{
 //		if (customer != null) {
 //			//System.out.println(""+getNumber());
 //			getCustomers().put(customer.getNumber(), customer);
+		customer.setCompany(this);
 		CustomerDAO.addCustomer(customer);
 //		}
 	}
@@ -135,6 +136,7 @@ public class ACMECourierCompany implements Serializable{
 //		if (driver != null) {
 //			getDrivers().put(driver.getNumber(), driver);
 //		}
+		driver.setCompany(this);
 		DriverDAO.addDriver(driver);
 	}
 	

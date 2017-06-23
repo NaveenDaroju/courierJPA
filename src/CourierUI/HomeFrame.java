@@ -153,7 +153,7 @@ public class HomeFrame extends JFrame {
 				
 				
 				getContentPane().removeAll();
-				getContentPane().add(new CustomerListPanel(currentFrame, company));
+				getContentPane().add(new CustomerListPanel(currentFrame,company));
 				getContentPane().revalidate();
 				
 			}

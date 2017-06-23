@@ -6,6 +6,7 @@ import javax.swing.event.ListSelectionListener;
 import courierDAO.EM;
 import courierPD.ACMECourierCompany;
 import courierPD.Customer;
+import courierPD.User;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -16,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.Map.Entry;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ListSelectionEvent;
@@ -32,30 +34,42 @@ private DefaultListModel<Customer> dList;
 
 	JButton btnEdit;
 	JButton btnDelete ;
-	public CustomerListPanel(JFrame currentFrame, ACMECourierCompany company){
+	public CustomerListPanel(JFrame currentFrame,ACMECourierCompany company){
 		EM.getEM().refresh(company);
 		setLayout(null);
 		
 		JLabel lblCustomersList = new JLabel("Customers List");
-		dList= new DefaultListModel<Customer>();
-
-		for(Customer customerEntry : company.getCustomers())
-		{
-			dList.addElement(customerEntry);
-			
-		}
-
 		lblCustomersList.setBounds(184, 41, 164, 16);
 		add(lblCustomersList);
+		dList= new DefaultListModel<Customer>();
 		
+			for(Customer customerEntry : company.getCustomers())
+			{
+				dList.addElement(customerEntry);
+			}
+		JList<Customer> list = new JList<Customer>(dList);
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if(list.getSelectedValue()!=null)
+				{
+					btnEdit.setEnabled(true);
+					btnDelete.setEnabled(true);
+				}
+			}
+		});
+	
+		list.setBounds(47, 69, 397, 214);
+     	add(list);
+	
 		
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			     Customer customer = new Customer();
+			     Customer customer=new Customer();
+				CustomerEditPanel customerEditPanel = new CustomerEditPanel(currentFrame,customer,company);
 	            currentFrame.getContentPane().removeAll();
-				currentFrame.getContentPane().add(new CustomerEditPanel(currentFrame,new Customer(),company));
+				currentFrame.getContentPane().add(customerEditPanel);
 			     currentFrame.getContentPane().revalidate();
 			}
 		});
@@ -67,8 +81,9 @@ private DefaultListModel<Customer> dList;
 			public void actionPerformed(ActionEvent e) {
 				//ACMECourierCompany company=new ACMECourierCompany();
 				//CustomerEditPanel customeEditPanel=);
+				CustomerEditPanel customerEditPanel=new CustomerEditPanel(currentFrame,(Customer)list.getSelectedValue(),company);
 				currentFrame.getContentPane().removeAll();
-				currentFrame.getContentPane().add(new CustomerEditPanel(currentFrame,(Customer)list.getSelectedValue(),company)); 
+				currentFrame.getContentPane().add(customerEditPanel); 
 				currentFrame.revalidate();
 			}
 		});
@@ -85,25 +100,17 @@ private DefaultListModel<Customer> dList;
 			userTransaction.begin();
 			company.removeCustomer((Customer)list.getSelectedValue());
 			userTransaction.commit();
-			
+			currentFrame.getContentPane().removeAll();
+			currentFrame.getContentPane().add(new CustomerListPanel(currentFrame,company)); 
+			currentFrame.revalidate();
 			
 			}
 		});
 		btnDelete.setBounds(235, 325, 97, 25);
 		btnDelete.setEnabled(false);
 		add(btnDelete);
-		list = new JList(dList);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if(list.getSelectedValue()!=null)
-				{
-					btnEdit.setEnabled(true);
-					btnDelete.setEnabled(true);
-				}
-			}
-		});
-	
-		list.setBounds(47, 69, 397, 214);
-     	add(list);
+		
+		
+		
 	}
 }

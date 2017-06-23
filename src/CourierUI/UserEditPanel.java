@@ -96,8 +96,6 @@ public class UserEditPanel extends JPanel {
 		
 		JButton btnNewButton = new JButton("Add User");
 		btnNewButton.addActionListener(new ActionListener() {
-			
-			
 			public void actionPerformed(ActionEvent e) {
 				EntityTransaction userTransaction=EM.getEM().getTransaction();
 				userTransaction.begin();

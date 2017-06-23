@@ -34,9 +34,9 @@ public class CustomerEditPanel extends JPanel
 	 */
 	public CustomerEditPanel(JFrame currentFrame, Customer customer,ACMECourierCompany company) {
 		EM.getEM().refresh(company);
-		
 		setLayout(null);
-		System.out.println("hello na");
+		
+		//System.out.println("hello na");
 		
 		JLabel lblCustomerEdit = new JLabel("Customer Edit");
 		lblCustomerEdit.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -88,17 +88,14 @@ public class CustomerEditPanel extends JPanel
 			public void actionPerformed(ActionEvent e) {
 				EntityTransaction userTransaction=EM.getEM().getTransaction();
 				userTransaction.begin();
-				
 				customer.setNumber(txtCustomerno.getText());
-		        
-		        
 		        //On Save- get values from the text fields and save
 		        customer.setName(txtName.getText());
 		        customer.setAddress(textLocation.getText());
 		        customer.setEmail(textEmailID.getText());
 		        company.addCustomer(customer);
 		        userTransaction.commit();
-		        
+		       
 		        currentFrame.getContentPane().removeAll();
 		        currentFrame.getContentPane().add(new CustomerListPanel(currentFrame,company));
 		        currentFrame.getContentPane().revalidate();	      
